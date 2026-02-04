@@ -426,7 +426,7 @@
             background: linear-gradient(135deg, #f0f0f0, #d0d0d0);
             color: #666;
             position: relative;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
         }
 
         .no-btn:hover {
@@ -534,7 +534,7 @@
 <body>
     <div class="heart-bg" id="heartBg"></div>
     
-    <div class="container">
+    <div class="container" id="container">
         <div class="question-container" id="questionContainer">
             <div class="icon bounce">
                 <div class="gift-icon">
@@ -570,7 +570,7 @@
                 </div>
             </div>
             <div class="success-message">
-                <span class="sparkle">✨</span> Yayyyyyy! You said YES! <span class="sparkle">✨</span>
+                <span class="sparkle">✨</span> Yeeyyyyyy! See you on February 14, bebe<i class="fas fa-heart"></i>
             </div>
             <div class="icon bounce">
                 <i class="fas fa-heart" style="font-size: 3em; color: #ff1493;"></i>
@@ -621,12 +621,13 @@
         const questionContainer = document.getElementById('questionContainer');
         const successContainer = document.getElementById('successContainer');
         const buttonContainer = document.getElementById('buttonContainer');
+        const container = document.getElementById('container');
         
         let noClickCount = 0;
         let yesBtnScale = 1;
         
         const noButtonTexts = [
-            "Are you sure? 🥺",
+            "Sigurado ka na riyan?🥺",
             "Hindi mo na ba ako mahal? 💔",
             "Ako na 'to oh' 😢",
             "Shiloh na talaga 'to",
@@ -656,34 +657,34 @@
             }
         });
         
-        // Make No button move on hover after 5 clicks - FIXED TO STAY WITHIN PAGE
+        // Make No button move on hover after 5 clicks - STAYS IN WHITE CONTAINER
         function moveNoButton() {
             if (noClickCount >= 5) {
-                const btnRect = noBtn.getBoundingClientRect();
-                const btnWidth = btnRect.width;
-                const btnHeight = btnRect.height;
+                const containerRect = container.getBoundingClientRect();
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
                 
-                // Get viewport dimensions
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-                
-                // Calculate safe bounds (with 20px padding from edges)
+                // Calculate safe bounds within container (with 20px padding from edges)
                 const padding = 20;
-                const maxX = viewportWidth - btnWidth - padding;
-                const maxY = viewportHeight - btnHeight - padding;
+                const maxX = containerRect.width - btnWidth - padding;
+                const maxY = containerRect.height - btnHeight - padding;
                 
-                // Generate random position within safe bounds
-                const randomX = Math.max(padding, Math.random() * maxX);
-                const randomY = Math.max(padding, Math.random() * maxY);
+                // Generate random position within container
+                const randomX = padding + Math.random() * (maxX - padding);
+                const randomY = padding + Math.random() * (maxY - padding);
                 
-                // Apply fixed positioning
-                noBtn.style.position = 'fixed';
+                // Apply absolute positioning relative to container
+                noBtn.style.position = 'absolute';
                 noBtn.style.left = randomX + 'px';
                 noBtn.style.top = randomY + 'px';
             }
         }
         
+        // Move on mouseenter
         noBtn.addEventListener('mouseenter', moveNoButton);
+        
+        // Move on mousemove (continuous tracking)
+        noBtn.addEventListener('mousemove', moveNoButton);
         
         // Also move on touch for mobile
         noBtn.addEventListener('touchstart', (e) => {
